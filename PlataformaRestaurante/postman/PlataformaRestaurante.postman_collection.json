@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "PlataformaRestaurante API",
+    "description": "Colección Postman para probar la API Spring Boot + MongoDB",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "usuarioId", "value": "" },
+    { "key": "clienteId", "value": "" },
+    { "key": "productoId", "value": "" },
+    { "key": "pedidoId", "value": "" },
+    { "key": "notificacionId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/usuarios" }
+        },
+        {
+          "name": "Crear usuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Perez\",\n  \"correo\": \"juan@example.com\",\n  \"contrasena\": \"secreta\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuarios"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('CREADO 201', () => pm.response.code === 201);",
+              "const id = pm.response.json().id; if (id) pm.collectionVariables.set('usuarioId', id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Obtener usuario por id",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/usuarios/{{usuarioId}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.response.to.have.status(200);"] } }]
+        },
+        {
+          "name": "Actualizar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Juan Actualizado\",\n  \"correo\": \"juan@example.com\",\n  \"contrasena\": \"secreta\"\n}" },
+            "url": "{{baseUrl}}/api/usuarios/{{usuarioId}}"
+          }
+        },
+        {
+          "name": "Eliminar usuario",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/usuarios/{{usuarioId}}" },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.response.to.have.status(204);"] } }]
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        { "name": "Listar clientes", "request": { "method": "GET", "url": "{{baseUrl}}/api/clientes" } },
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Ana\",\n  \"telefono\": \"3000000000\",\n  \"correo\": \"ana@example.com\",\n  \"direccion\": \"Calle 123\"\n}" },
+            "url": "{{baseUrl}}/api/clientes"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('CREADO 201', () => pm.response.code === 201);",
+            "const id = pm.response.json().id; if (id) pm.collectionVariables.set('clienteId', id);"
+          ] } }]
+        },
+        { "name": "Obtener cliente", "request": { "method": "GET", "url": "{{baseUrl}}/api/clientes/{{clienteId}}" } },
+        { "name": "Actualizar cliente", "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"nombre\": \"Ana Gomez\",\n  \"telefono\": \"3000000000\",\n  \"correo\": \"ana@example.com\",\n  \"direccion\": \"Calle 456\"\n}"}, "url": "{{baseUrl}}/api/clientes/{{clienteId}}" } },
+        { "name": "Eliminar cliente", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/clientes/{{clienteId}}" } }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        { "name": "Listar productos", "request": { "method": "GET", "url": "{{baseUrl}}/api/productos" } },
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Pizza\",\n  \"precio\": 25.0,\n  \"categoria\": \"COMIDA\"\n}" },
+            "url": "{{baseUrl}}/api/productos"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('CREADO 201', () => pm.response.code === 201);",
+            "const id = pm.response.json().id; if (id) pm.collectionVariables.set('productoId', id);"
+          ] } }]
+        },
+        { "name": "Obtener producto", "request": { "method": "GET", "url": "{{baseUrl}}/api/productos/{{productoId}}" } },
+        { "name": "Actualizar producto", "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"nombre\": \"Pizza Doble\",\n  \"precio\": 30.0,\n  \"categoria\": \"COMIDA\"\n}"}, "url": "{{baseUrl}}/api/productos/{{productoId}}" } },
+        { "name": "Eliminar producto", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/productos/{{productoId}}" } }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        { "name": "Listar pedidos", "request": { "method": "GET", "url": "{{baseUrl}}/api/pedidos" } },
+        {
+          "name": "Crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"items\": [\n    { \n      \"productoId\": \"{{productoId}}\", \n      \"cantidad\": 2, \n      \"precioUnitario\": 25.0 \n    }\n  ],\n  \"total\": 50.0,\n  \"fechaCreacion\": \"2025-01-01T12:00:00Z\",\n  \"estado\": \"PENDIENTE\"\n}" },
+            "url": "{{baseUrl}}/api/pedidos"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('CREADO 201', () => pm.response.code === 201);",
+            "const id = pm.response.json().id; if (id) pm.collectionVariables.set('pedidoId', id);"
+          ] } }]
+        },
+        { "name": "Obtener pedido", "request": { "method": "GET", "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}" } },
+        { "name": "Actualizar pedido", "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"clienteId\": \"{{clienteId}}\",\n  \"items\": [ { \n      \"productoId\": \"{{productoId}}\", \n      \"cantidad\": 3, \n      \"precioUnitario\": 25.0 \n    } ],\n  \"total\": 75.0,\n  \"fechaCreacion\": \"2025-01-01T12:00:00Z\",\n  \"estado\": \"EN_PROCESO\"\n}"}, "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}" } },
+        { "name": "Eliminar pedido", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/pedidos/{{pedidoId}}" } }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        { "name": "Listar notificaciones", "request": { "method": "GET", "url": "{{baseUrl}}/api/notificaciones" } },
+        {
+          "name": "Crear notificación",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"tipo\": \"PEDIDO_LISTO\",\n  \"mensaje\": \"Tu pedido está listo\",\n  \"fechaEnvio\": \"2025-01-01T12:00:00Z\",\n  \"estado\": \"ENVIADA\",\n  \"canal\": \"EMAIL\",\n  \"destinatarioId\": \"{{usuarioId}}\"\n}" },
+            "url": "{{baseUrl}}/api/notificaciones"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('CREADO 201', () => pm.response.code === 201);",
+            "const id = pm.response.json().id; if (id) pm.collectionVariables.set('notificacionId', id);"
+          ] } }]
+        },
+        { "name": "Obtener notificación", "request": { "method": "GET", "url": "{{baseUrl}}/api/notificaciones/{{notificacionId}}" } },
+        { "name": "Actualizar notificación", "request": { "method": "PUT", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"tipo\": \"ENVIADO\",\n  \"mensaje\": \"Tu pedido fue enviado\",\n  \"fechaEnvio\": \"2025-01-01T12:05:00Z\",\n  \"estado\": \"ENVIADA\",\n  \"canal\": \"EMAIL\",\n  \"destinatarioId\": \"{{usuarioId}}\"\n}"}, "url": "{{baseUrl}}/api/notificaciones/{{notificacionId}}" } },
+        { "name": "Eliminar notificación", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/notificaciones/{{notificacionId}}" } }
+      ]
+    }
+  ]
+}
